@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class ProductController {
@@ -20,10 +19,10 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping("/products")
-    public List<Product> getAllProducts() {
-        return productService.getAllProducts();
-    }
+//    @GetMapping("/products")
+//    public List<Product> getAllProducts() {
+//        return productService.getAllProducts();
+//    }
 
     @GetMapping("/product/{id}")
     public Product getProductById(@PathVariable Long id) {
@@ -35,8 +34,8 @@ public class ProductController {
     }
 
     @GetMapping("/products/change_price")
-    public void changeScore(@RequestParam Long productId, @RequestParam Integer delta) {
-        productService.changeScore(productId, delta);
+    public void changePrice(@RequestParam Long productId, @RequestParam Integer delta) {
+        productService.changePrice(productId, delta);
     }
 
     @GetMapping("/products/price_between")
@@ -52,6 +51,12 @@ public class ProductController {
     @GetMapping("/products/less_price/{price}")
     public List<Product> getLessPrice(@PathVariable Integer price){
         return  productService.getAllLessPrice(price);
+    }
+
+    @GetMapping("/products")
+    public List <Product> filterProduct(@RequestParam (defaultValue = "0") Integer numberMin, @RequestParam (defaultValue = "9999") Integer numberMax){
+        System.out.println("min: " + numberMin + " max: " + numberMax);
+        return productService.getAllFilteredProducts(numberMin, numberMax);
     }
 
 }

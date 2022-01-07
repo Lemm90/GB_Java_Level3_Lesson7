@@ -29,7 +29,7 @@ public class ProductService {
     }
 
     @Transactional
-    public void changeScore(Long productId, Integer delta) {
+    public void changePrice(Long productId, Integer delta) {
         Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundExceptions("Unable to change product's price. Product not found, id: " + productId));
         product.setPrice(product.getPrice() + delta);
     }
@@ -45,4 +45,9 @@ public class ProductService {
     public List<Product> getAllLessPrice(Integer price) {
         return productRepository.getAllLessPrice(price);
     }
+
+    public List<Product>getAllFilteredProducts(Integer numberMin, Integer numberMax){
+        return productRepository.getAllFilteredProducts(numberMin, numberMax);
+    }
+
 }

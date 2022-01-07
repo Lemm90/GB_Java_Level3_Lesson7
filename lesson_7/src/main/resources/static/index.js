@@ -2,10 +2,18 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
     const contextPath = 'http://localhost:8189/app';
 
     $scope.loadProducts = function () {
-        $http.get(contextPath + '/products')
-            .then(function (response) {
-                $scope.ProductsList = response.data;
-            });
+        console.log($scope.number)
+                $http({
+                    url: contextPath + '/products',
+                    method: 'GET',
+                    params: {
+                        numberMin: $scope.number ? $scope.number.min : null,
+                        numberMax: $scope.number ? $scope.number.max : null
+                    }
+                }).then(function (response) {
+                console.log(response.data)
+                    $scope.ProductsList = response.data;
+                });
     };
 
     $scope.deleteProduct = function (productId) {
