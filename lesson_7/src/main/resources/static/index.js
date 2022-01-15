@@ -1,23 +1,32 @@
 angular.module('app', []).controller('indexController', function ($scope, $http) {
-    const contextPath = 'http://localhost:8189/app';
+    const contextPath = 'http://localhost:8189/app/api/v1';
 
     $scope.loadProducts = function () {
-        console.log($scope.number)
+        console.log($scope.filter)
                 $http({
                     url: contextPath + '/products',
                     method: 'GET',
                     params: {
-                        numberMin: $scope.number ? $scope.number.min : null,
-                        numberMax: $scope.number ? $scope.number.max : null
+                        min_price: $scope.filter ? $scope.filter.min_price: null,
+                        max_price: $scope.filter ? $scope.filter.max_price : null,
+                        title: $scope.filter ? $scope.filter.title : null,
                     }
                 }).then(function (response) {
-                console.log(response.data)
-                    $scope.ProductsList = response.data;
+                    $scope.ProductsList = response.data.content;
                 });
     };
 
+        $scope.addProduct = function () {
+            console.log($scope.newProducts)
+                    $http.post(contextPath + '/products', $scope.newProducts)
+                    .then(function (response) {
+                    alert ('Продукт добавлен')
+                        $scope.loadProducts;
+                    });
+        };
+
     $scope.deleteProduct = function (productId) {
-        $http.get(contextPath + '/products/delete/' + productId)
+        $http.delete(contextPath + '/products/' + productId)
             .then(function (response) {
                 $scope.loadProducts();
             });

@@ -1,10 +1,15 @@
 package ru.khorolskii.lesson_7.lesson_7.services;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
-import ru.khorolskii.lesson_7.lesson_7.data.Product;
+import ru.khorolskii.lesson_7.lesson_7.dto.NewProductDto;
+import ru.khorolskii.lesson_7.lesson_7.entities.Product;
 import org.springframework.stereotype.Service;
 import ru.khorolskii.lesson_7.lesson_7.exceptions.ResourceNotFoundExceptions;
 import ru.khorolskii.lesson_7.lesson_7.repositories.ProductRepository;
+import ru.khorolskii.lesson_7.lesson_7.repositories.specifications.ProductsSpecifications;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +20,23 @@ public class ProductService {
 
     public ProductService(ProductRepository productRepository) {
         this.productRepository= productRepository;
+    }
+
+    public Page <Product> find(Integer minPrice, Integer maxPrice, String title, Integer page){
+        System.out.println(minPrice);
+        System.out.println(maxPrice);
+        System.out.println(title);
+        Specification <Product> spec = Specification.where(null);
+        if(minPrice != null){
+            spec = spec.and(ProductsSpecifications.priceGreaterOrEqualsThan(minPrice));
+        }
+        if(maxPrice != null){
+            spec = spec.and(ProductsSpecifications.pricelessThanOrEqualThan(maxPrice));
+        }
+        if(title != null){
+            spec = spec.and(ProductsSpecifications.titleLike(title));
+        }
+        return productRepository.findAll(spec, PageRequest.of(page - 1, 5));
     }
 
     public List<Product> getAllProducts() {
@@ -48,6 +70,11 @@ public class ProductService {
 
     public List<Product>getAllFilteredProducts(Integer numberMin, Integer numberMax){
         return productRepository.getAllFilteredProducts(numberMin, numberMax);
+    }
+
+    public Product save(NewProductDto newProductDto) {
+        Product p = new Product(newProductDto);
+        return productRepository.save(p);
     }
 
 }

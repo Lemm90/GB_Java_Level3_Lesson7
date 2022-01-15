@@ -1,20 +1,14 @@
-package ru.khorolskii.lesson_7.lesson_7.data;
+package ru.khorolskii.lesson_7.lesson_7.dto;
 
 
-import javax.persistence.*;
+import ru.khorolskii.lesson_7.lesson_7.entities.Product;
 
-@Entity
-@Table(name="products")
-public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+public class NewProductDto {
+
     private long id;
 
-    @Column(name = "title")
     public String title;
 
-    @Column(name = "price")
     public int price;
 
     public Long getId() {
@@ -41,6 +35,6 @@ public class Product {
         this.price = price;
     }
 
-    public Product() {
+    public NewProductDto() {
     }
 }
