@@ -1,9 +1,13 @@
 package ru.khorolskii.lesson_7.lesson_7.dto;
 
 
-import ru.khorolskii.lesson_7.lesson_7.entities.Product;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 
 public class ProductDto {
 
@@ -13,36 +17,4 @@ public class ProductDto {
 
     public int price;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public ProductDto() {
-    }
-
-    public ProductDto(Product product) {
-        this.id = product.getId();
-        this.title = product.getTitle();
-        this.price = product.getPrice();
-    }
 }
