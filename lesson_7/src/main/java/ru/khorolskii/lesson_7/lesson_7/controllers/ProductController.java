@@ -1,8 +1,9 @@
 package ru.khorolskii.lesson_7.lesson_7.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-import ru.khorolskii.lesson_7.lesson_7.dto.NewProductDto;
+import ru.khorolskii.lesson_7.lesson_7.converter.ProductConverter;
 import ru.khorolskii.lesson_7.lesson_7.dto.ProductDto;
 import ru.khorolskii.lesson_7.lesson_7.entities.Product;
 import ru.khorolskii.lesson_7.lesson_7.exceptions.ResourceNotFoundExceptions;
@@ -13,12 +14,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/products")
+@RequiredArgsConstructor
 public class ProductController {
-    private ProductService productService;
+    private final ProductService productService;
+    private final ProductConverter productConverter;
 
-    public ProductController(ProductService productService) {
-        this.productService = productService;
-    }
     @GetMapping
     public Page <ProductDto> filterProducts(
             @RequestParam (name = "min_price", required = false) Integer minPrice,
@@ -29,21 +29,26 @@ public class ProductController {
         if (page <1) {
             page = 1;
         }
-        return productService.find(minPrice, maxPrice, title, page).map(p -> new ProductDto(p));
+        return productService.find(minPrice, maxPrice, title, page).map(p -> productConverter.conversionToDto(p));
     }
 
     @GetMapping("/{id}")
-    public Product getProductById(@PathVariable Long id) {
-        return productService.getProductById(id).orElseThrow(() -> new ResourceNotFoundExceptions("Product not found, id: " + id));}
+    public ProductDto getProductById(@PathVariable Long id) {
+        Product product = productService.getProductById(id).orElseThrow(() -> new ResourceNotFoundExceptions("Product not found, id: " + id));
+        return productConverter.conversionToDto(product);
+    }
 
     @PostMapping
-    public Product addProduct(@RequestBody NewProductDto newProductDto){
-        return productService.save(newProductDto);
+    public ProductDto addProduct(@RequestBody ProductDto ProductDto){
+        Product product = productConverter.conversionToEntity(ProductDto);
+        productService.save(product);
+        return productConverter.conversionToDto(product);
     }
 
     @PutMapping
-    public Product updateProduct(@RequestBody NewProductDto newProductDto){
-        return productService.save(newProductDto);
+    public ProductDto updateProduct(@RequestBody ProductDto productDto){
+        Product product = productService.update(productDto);
+        return productConverter.conversionToDto(product);
     }
 
     @DeleteMapping("/{id}")
@@ -60,14 +65,14 @@ public class ProductController {
 //    public List<Product> getPriceBetween(@RequestParam(defaultValue = "0") Integer min, @RequestParam(defaultValue = "9999") Integer max) {
 //        return productService.getAllPriceBetween(min, max);
 //    }
-
-    @GetMapping("/more_price/{price}")
-    public List<Product> getMorePrice(@PathVariable Integer price) {
-        return productService.getAllMorePrice(price);
-    }
-
-    @GetMapping("/less_price/{price}")
-    public List<Product> getLessPrice(@PathVariable Integer price){
-        return  productService.getAllLessPrice(price);
-    }
+//
+//    @GetMapping("/more_price/{price}")
+//    public List<Product> getMorePrice(@PathVariable Integer price) {
+//        return productService.getAllMorePrice(price);
+//    }
+//
+//    @GetMapping("/less_price/{price}")
+//    public List<Product> getLessPrice(@PathVariable Integer price){
+//        return  productService.getAllLessPrice(price);
+//    }
 }
