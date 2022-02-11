@@ -1,6 +1,5 @@
 package ru.khorolskii.lesson_7.lesson_7.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,11 +8,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class ProductDto {
+public class ProductToCartDto {
 
-    private long id;
+    private Long id;
 
-    public String title;
+    private String title;
 
-    public int price;
+    private int price;
 }

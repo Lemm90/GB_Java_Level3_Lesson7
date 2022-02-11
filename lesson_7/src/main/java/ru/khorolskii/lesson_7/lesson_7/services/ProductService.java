@@ -33,7 +33,7 @@ public class ProductService {
         if(title != null){
             spec = spec.and(ProductsSpecifications.titleLike(title));
         }
-        return productRepository.findAll(spec, PageRequest.of(page - 1, 5));
+        return productRepository.findAll(spec, PageRequest.of(page - 1, Integer.MAX_VALUE));
     }
 
     public List<Product> getAllProducts() {
@@ -74,6 +74,7 @@ public class ProductService {
         return productRepository.save(product);
     }
 
+    @Transactional
     public Product update(ProductDto productDto){
         Product product = productRepository.findById(productDto.getId()).orElseThrow(() -> new ResourceNotFoundExceptions("Невозможно обновить продукта, не надйен в базе, id: " + productDto.getId()));
         product.setPrice(productDto.getPrice());
