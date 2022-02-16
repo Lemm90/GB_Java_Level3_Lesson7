@@ -6,14 +6,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import ru.khorolskii.lesson_7.lesson_7.converter.ProductConverter;
 import ru.khorolskii.lesson_7.lesson_7.dto.ProductDto;
-import ru.khorolskii.lesson_7.lesson_7.dto.ProductToCartDto;
 import ru.khorolskii.lesson_7.lesson_7.entities.Product;
 import ru.khorolskii.lesson_7.lesson_7.exceptions.ResourceNotFoundExceptions;
-import ru.khorolskii.lesson_7.lesson_7.services.CartService;
+import ru.khorolskii.lesson_7.lesson_7.entities.Cart;
 import ru.khorolskii.lesson_7.lesson_7.services.ProductService;
-
-
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -22,7 +18,7 @@ import java.util.List;
 public class ProductController {
     private final ProductService productService;
     private final ProductConverter productConverter;
-    private final CartService cartService;
+    private final Cart cart;
 
     @GetMapping
     public Page <ProductDto> filterProducts(
