@@ -48,6 +48,8 @@
             <td>Продукт</td>
             <td>Цена</td>
             <td>Действие</td>
+            <td>Действие с корзиной</td>
+
         </tr>
         <tbody>
         <tr ng-repeat="p in ProductsList">
@@ -60,10 +62,34 @@
             </td>
             <td>
                 <button class="btn btn-danger" ng-click="deleteProduct(p.id)">Удалить</button>
+
+            </td>
+
+            <td>
+                <button class="btn btn-success" ng-click="addProductToCart(p.id)">Добавить в корзину</button>
+                <button class="btn btn-danger" ng-click="removeProductFromCart(p.id)">убрать из корзины</button>
             </td>
         </tr>
         </tbody>
     </table>
+    <button class="btn btn-info" ng-click="showCart()">показать корзину</button>
+    <h3>Корзина</h3>
+    <table class="table table-hover" cellpadding="0" cellspacing="0">
+            <td>ID</td>
+            <td>Продукт</td>
+            <td>Цена</td>
+
+        </tr>
+        <tbody>
+        <tr ng-repeat="c in CartList">
+            <td>{{c.id}</td>
+            <td>{{c.title}}</td>
+            <td>{{c.price}}</td>
+        </tr>
+        </tbody>
+    </table>
+
+
 </div>
 </body>
 </html>

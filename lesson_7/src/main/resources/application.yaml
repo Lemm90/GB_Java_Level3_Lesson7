@@ -18,3 +18,6 @@ spring:
       enabled: true
       settings:
         web-allow-others: false
+logging:
+  level:
+    ru.khorolskii.lesson_7.lesson_7: DEBUG
